@@ -7,6 +7,8 @@ var { Todo } = require('./models/todo')
 var { User } = require('./models/user')
 
 var app = express()
+//process.env.PORT is a value set if app running on heroku. Not set if in local 
+const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
@@ -54,7 +56,7 @@ app.get('/todos/:id', (req, res) => {
 })
 
 app.listen(3000, () => { 
-  console.log('Started on port 3000')
+  console.log(`Started up at port ${port}`)
 })
 
 module.exports = { app }
