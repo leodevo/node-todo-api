@@ -1,15 +1,15 @@
 {
-  "name": "todo-api",
+  "name": "node-todo-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js", //run by heroku
+    "start": "node server/server.js", //for heroku
     "test": "mocha server/**/*.test.js",
     "test-watch": "nodemon --exec 'npm test'"
   },
-  "engines": { // for heroku
-    "node": "10.7.0"
+  "engines": {
+    "node": "10.7.0" //for heroku
   },
   "author": "",
   "license": "ISC",
