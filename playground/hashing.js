@@ -8,7 +8,7 @@ let data = {
 let token = jwt.sign(data, '123abc')
 console.log(token)
 
-var decoded = jwt.verify(token, '1')
+var decoded = jwt.verify(token, '123abc')
 console.log(decoded)
 //jwt.verify
 // let message = 'I am user number 3'

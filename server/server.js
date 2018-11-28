@@ -8,6 +8,7 @@ const { ObjectID } = require('mongodb')
 var { mongoose } = require('./db/mongoose')
 var { Todo } = require('./models/todo')
 var { User } = require('./models/user')
+var { authenticate } = require('./middleware/authenticate')
 
 var app = express()
 //process.env.PORT is a value set if app running on heroku. Not set if in local 
@@ -109,6 +110,10 @@ app.post('/users', (req, res) => {
   }).catch((e) => {
     res.status(400).send(e)
   })
+})
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user)
 })
 
 app.listen(port, () => {

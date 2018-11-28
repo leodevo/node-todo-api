@@ -44,7 +44,7 @@ UserSchema.methods.toJSON = function () {
 //but if I define it with the function keyword, if I call this method on a object user, then the keyword this will be bind
 // to that object. With an arrow function it could be bind to anything.
 UserSchema.methods.generateAuthToken = function () {
-  let user = this
+  let user = this // instance method get called with the individual document as the 'this' binding
   let access = 'auth'
   let token = jwt.sign({ _id: user._id.toHexString(), access }, 'abc123').toString()
 
@@ -52,6 +52,25 @@ UserSchema.methods.generateAuthToken = function () {
 
   return user.save().then(() => {
     return token
+  })
+}
+
+//'statics' keyword équivalent de 'methods' mais tout ce qui tu definis dans statics le rend comme une model method
+// dans methods, ça le rend comme une instance method
+UserSchema.statics.findByToken = function (token) {
+  let User = this // model methods gets called with the model as the 'this' binding
+  let decoded 
+
+  try {
+    decoded = jwt.verify(token, 'abc123')
+  } catch (e) {
+    return Promise.reject()
+  }
+
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
   })
 }
 
