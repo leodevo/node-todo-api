@@ -75,7 +75,7 @@ UserSchema.statics.findByToken = function (token) {
   })
 }
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   let user = this
 
   if (user.isModified('password')) {
@@ -89,7 +89,6 @@ UserSchema.pre('save', function(next) {
     next()
   }
 })
-
 
 var User = mongoose.model('User', UserSchema) 
 
