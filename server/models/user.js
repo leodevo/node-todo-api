@@ -60,7 +60,7 @@ UserSchema.methods.generateAuthToken = function () {
 // dans methods, ça le rend comme une instance method
 UserSchema.statics.findByToken = function (token) {
   let User = this // model methods gets called with the model as the 'this' binding
-  let decoded 
+  let decoded
 
   try {
     decoded = jwt.verify(token, 'abc123')
@@ -72,6 +72,26 @@ UserSchema.statics.findByToken = function (token) {
     '_id': decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
+  })
+}
+
+UserSchema.statics.findByCredentials = function (email, password) {
+  let User = this
+
+  return User.findOne({ email }).then((user) => {
+    if (!user) {
+      return Promise.reject()
+    }
+
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, res) => {
+        if (res === true) {
+          resolve(user)
+        } else {
+          reject()
+        }
+      })
+    })
   })
 }
 
