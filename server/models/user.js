@@ -56,6 +56,16 @@ UserSchema.methods.generateAuthToken = function () {
   })
 }
 
+UserSchema.methods.removeToken = function (token) {
+  var user = this 
+
+  return user.update({
+    $pull: {
+      tokens: { token }
+    }
+  })
+}
+
 //'statics' keyword équivalent de 'methods' mais tout ce qui tu definis dans statics le rend comme une model method
 // dans methods, ça le rend comme une instance method
 UserSchema.statics.findByToken = function (token) {
@@ -109,6 +119,8 @@ UserSchema.pre('save', function (next) {
     next()
   }
 })
+
+
 
 var User = mongoose.model('User', UserSchema) 
 
