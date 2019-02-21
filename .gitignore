@@ -1,2 +1,3 @@
 node_modules/
 .eslintrc.js
+server/config/config.json
