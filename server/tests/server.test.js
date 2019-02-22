@@ -121,7 +121,7 @@ describe('GET /todos/:id', () => {
           }
 
           Todo.findById(hexId).then((todo) => {
-            expect(todo).toBeNull()
+            expect(todo).toBeFalsy()
             done()
           }).catch((e) => done(e))
         })
@@ -264,7 +264,7 @@ describe('POST /users', () => {
         if (err) {
           return done(err)
         }
-        
+
         User.findOne({ email }).then((user) => {
           expect(user).toBeTruthy()
           expect(user.password).not.toBe(password)
@@ -312,22 +312,22 @@ describe('POST /users/login', () => {
       })
       .expect(200)
       .expect((res) => {
-        expect(res.headers['x-auth']).toBeTruthy();
+        expect(res.headers['x-auth']).toBeTruthy()
       })
       .end((err, res) => {
         if (err) {
-          return done(err);
+          return done(err)
         }
 
         User.findById(users[1]._id).then((user) => {
           expect(user.tokens[1]).toMatchObject({
             access: 'auth',
             token: res.headers['x-auth']
-          });
-          done();
-        }).catch((e) => done(e));
-      });
-  });
+          })
+          done()
+        }).catch((e) => done(e))
+      })
+  })
 
   it('should reject invalid login', (done) => {
     request(app)
@@ -338,7 +338,7 @@ describe('POST /users/login', () => {
       })
       .expect(400)
       .expect((res) => {
-        expect(res.headers['x-auth']).toBeFalsy();
+        expect(res.headers['x-auth']).toBeFalsy()
       })
       .end((err, res) => {
         if (err) {
@@ -347,7 +347,7 @@ describe('POST /users/login', () => {
 
         User.findById(users[1]._id).then((user) => {
           expect(user.tokens.length).toBe(1)
-          done();
+          done()
         }).catch((e) => done(e))
       })
   })
@@ -362,7 +362,7 @@ describe('DELETE /users/me/token', () => {
       .expect(200)
       .end((err, res) => {
         if (err) {
-          return done(err);
+          return done(err)
         }
 
         User.findById(users[0]._id).then((user) => {

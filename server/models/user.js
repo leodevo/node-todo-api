@@ -33,16 +33,16 @@ let UserSchema = new mongoose.Schema({
   }]
 })
 
-//override method :) 
+// override method
 UserSchema.methods.toJSON = function () {
   let user = this
-  let userObject = user.toObject() //converts mongoose object to a regular object
+  let userObject = user.toObject() // converts mongoose object to a regular object
 
   return _.pick(userObject, ['_id', 'email']) // do not return password and token
 }
 
-//here defining function with 'function' keyword and not an arrow function because arrow function do not bind 'this'
-//but if I define it with the function keyword, if I call this method on a object user, then the keyword this will be bind
+// here defining function with 'function' keyword and not an arrow function because arrow function do not bind 'this'
+// but if I define it with the function keyword, if I call this method on a object user, then the keyword this will be bind
 // to that object. With an arrow function it could be bind to anything.
 UserSchema.methods.generateAuthToken = function () {
   let user = this // instance method get called with the individual document as the 'this' binding
@@ -57,7 +57,7 @@ UserSchema.methods.generateAuthToken = function () {
 }
 
 UserSchema.methods.removeToken = function (token) {
-  var user = this 
+  var user = this
 
   return user.update({
     $pull: {
@@ -66,7 +66,7 @@ UserSchema.methods.removeToken = function (token) {
   })
 }
 
-//'statics' keyword équivalent de 'methods' mais tout ce qui tu definis dans statics le rend comme une model method
+// 'statics' keyword équivalent de 'methods' mais tout ce qui tu definis dans statics le rend comme une model method
 // dans methods, ça le rend comme une instance method
 UserSchema.statics.findByToken = function (token) {
   let User = this // model methods gets called with the model as the 'this' binding
@@ -75,7 +75,7 @@ UserSchema.statics.findByToken = function (token) {
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET)
   } catch (e) {
-    return Promise.reject()
+    return Promise.reject(e)
   }
 
   return User.findOne({
@@ -120,8 +120,6 @@ UserSchema.pre('save', function (next) {
   }
 })
 
-
-
-var User = mongoose.model('User', UserSchema) 
+var User = mongoose.model('User', UserSchema)
 
 module.exports = { User }
