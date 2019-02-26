@@ -41,9 +41,10 @@ UserSchema.methods.toJSON = function () {
   return _.pick(userObject, ['_id', 'email']) // do not return password and token
 }
 
-// here defining function with 'function' keyword and not an arrow function because arrow function do not bind 'this'
-// but if I define it with the function keyword, if I call this method on a object user, then the keyword this will be bind
-// to that object. With an arrow function it could be bind to anything.
+// Here we define function with 'function' keyword and not an arrow function because arrow functions do not bind 'this'
+// but if I define it with the function keyword, if I call this method on a object user, then the keyword this will
+// be bound to that object.
+// With an arrow function it could be bound to anything.
 UserSchema.methods.generateAuthToken = function () {
   let user = this // instance method get called with the individual document as the 'this' binding
   let access = 'auth'
@@ -66,8 +67,13 @@ UserSchema.methods.removeToken = function (token) {
   })
 }
 
-// 'statics' keyword équivalent de 'methods' mais tout ce qui tu definis dans statics le rend comme une model method
-// dans methods, ça le rend comme une instance method
+// Model methods != instance methods
+// User : model methods
+// user : user methods
+
+// 'statics' keyword equivalent to 'methods' keyword BUT
+// 'statics' ==> model method
+// 'methods' ==> instance method
 UserSchema.statics.findByToken = function (token) {
   let User = this // model methods gets called with the model as the 'this' binding
   let decoded
