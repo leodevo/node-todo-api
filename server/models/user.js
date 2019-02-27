@@ -36,7 +36,12 @@ let UserSchema = new mongoose.Schema({
 // override method
 UserSchema.methods.toJSON = function () {
   let user = this
-  let userObject = user.toObject() // converts mongoose object to a regular object
+  let userObject = user.toObject()
+  /*
+    toOjbect() takes the mongoose object, and converts it into a regular object where only the
+    properties available on the the document exist.
+    To sum up it converts this document into a plain javascript object, ready for storage in MongoDB.
+  */
 
   return _.pick(userObject, ['_id', 'email']) // do not return password and token
 }
