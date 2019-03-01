@@ -82,16 +82,24 @@ UserSchema.methods.removeToken = function (token) {
 UserSchema.statics.findByToken = function (token) {
   let User = this // model methods gets called with the model as the 'this' binding
   let decoded
+  // First step is to verify token authenticity
 
+  // jwt.verify() will throw if verification fails (token value manipulated or secret salt wrong)
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET)
   } catch (e) {
+    /*
+    return new Promise((resolve, reject) => {
+      reject()
+    })
+      // Instead of returning a Promise that rejects right away, we can return 'Promise.reject()'
+    */
     return Promise.reject(e)
   }
 
   return User.findOne({
     '_id': decoded._id,
-    'tokens.token': token,
+    'tokens.token': token, // quotes needed when nested object
     'tokens.access': 'auth'
   })
 }
@@ -115,6 +123,15 @@ UserSchema.statics.findByCredentials = function (email, password) {
     })
   })
 }
+
+/*
+  This is a middleware that gets called before a save event.
+  Here we want to hash the password before it is saved.
+  However we check if the user password has been modified ('user.isModifier('password')')
+  Because let's say the user has only changed the email without touching the password,
+  then we will rehash the hashed password ! Which is not what we want. Therefore we
+  check if the password has been modified before hashing it.
+*/
 
 UserSchema.pre('save', function (next) {
   let user = this

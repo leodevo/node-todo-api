@@ -5,7 +5,9 @@ let authenticate = (req, res, next) => {
 
   User.findByToken(token).then((user) => {
     if (!user) {
-      return Promise.reject() // will catch an error and then go to code a few line below and send a 401
+      return Promise.reject()
+      // will catch an error and then go to code a few line below and send a 401
+      // We also could have thrown an error here, the result would have been the same
     }
 
     req.user = user
